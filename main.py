@@ -5,6 +5,7 @@ import pandas as pd
 
 
 def get_data(url):
+    # Fetches HTML content from the specified URL
     ua = UserAgent()
     headers = {'User-Agent': ua.ie}
     with requests.Session() as session:
@@ -14,6 +15,7 @@ def get_data(url):
 
 
 def get_single_product_detail(url):
+    # Extracts title, price, and rating from a single product page
     soup = BeautifulSoup(get_data(url), 'html.parser')
 
     title = soup.find(id="title", class_="a-size-large").text.strip()
@@ -28,6 +30,7 @@ def get_single_product_detail(url):
 
 
 def scrape_products(url):
+    # Scrapes product details from the search results page
     soup = BeautifulSoup(get_data(url), 'html.parser')
 
     product_urls = set()
@@ -60,6 +63,7 @@ def scrape_products(url):
 
 
 def write_to_csv():
+    # Writes the scraped data to a CSV file
     df = pd.DataFrame(all_data)
     df.to_csv("products.csv", index=False)
     print("File created successfully: products.csv")
@@ -73,5 +77,6 @@ all_data = {
 }
 
 if __name__ == "__main__":
-    product_name = "monitor" # we can enter any product of our choice
+    # Enter the desired product name
+    product_name = "monitor"
     scrape_products(f"https://www.amazon.in/s?k={product_name}")
